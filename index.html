@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+	<title>Is It Over Yet?</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="./css/main.css" />
+	<script type="text/javascript" src="./scripts/countdown.min.js"></script>
+</head>
+<body>
+	<img id="timer" src="./images/timer.png" /><br />
+	<h1 id="gone-yet">IS NOAH GONE YET?</h1><br />
+	<noscript>I couldn't tell you if I wanted to. Enable JavaScript and let's try this again.</noscript>
+	<span id="prefix">Nope, but only</span>
+	<div id="clock">
+		<div class="container">
+			<div class="counter" id="years"></div>
+			<span id="year-label"></span>
+		</div>
+		<div class="container">
+			<div class="counter" id="months"></div>
+			<span id="month-label"></span>
+		</div>
+		<div class="container">
+			<div class="counter" id="days"></div>
+			<span id="day-label"></span>
+		</div>
+		<div class="container">
+			<div class="counter" id="hours"></div>
+			<span id="hour-label"></span>
+		</div>
+		<div class="container">
+			<div class="counter" id="minutes"></div>
+			<span id="minute-label"></span>
+		</div>
+		<div class="container">
+			<div class="counter" id="seconds"></div>
+			<span id="second-label"></span>
+		</div>
+	</div>
+	<div id="suffix">until relief.</div>
+	<script type="text/javascript">
+		document.getElementById("clock").style.display = "block";
+		document.getElementById("prefix").style.display = "inline";
+		document.getElementById("suffix").style.display = "inline";
+	</script>
+	<div id="tweeting">It looks like he's still Tweeting, <span id="too">too</span>&hellip;</div>
+	<center>
+		<a id="tweet"></a>
+	</center><br />
+	<script type="text/javascript">
+		var haveHandledPastDate = false;
+		var update = function() {
+			var target = new Date(2016, 06, 14);
+			var date = Date.now();
+			if(date > target && !haveHandledPastDate) {
+				document.getElementById("prefix").innerHTML = "Yes! He has been for";
+				var too = document.getElementById("too");
+				if(too) {
+					too.innerHTML = "though";
+				}
+				document.body.removeChild(document.getElementById("suffix"));
+				haveHandledPastDate = true;
+			}
+			var t = countdown(target);
+			var years = t.years, months = t.months, days = t.days, hours = t.hours, minutes = t.minutes, seconds = t.seconds; //Look at me, being a rebel and using non-public APIs.
+			document.getElementById("year-label").innerHTML = (years == 1) ? "year" : "years";
+			document.getElementById("month-label").innerHTML = (months == 1) ? "month" : "months";
+			document.getElementById("day-label").innerHTML = (days == 1) ? "day" : "days";
+			document.getElementById("hour-label").innerHTML = (hours == 1) ? "hour" : "hours";
+			document.getElementById("minute-label").innerHTML = (minutes == 1) ? "minute" : "minutes";
+			document.getElementById("second-label").innerHTML = (seconds == 1) ? "second" : "seconds";
+			document.getElementById("years").innerHTML = years;
+			document.getElementById("months").innerHTML = months;
+			document.getElementById("days").innerHTML = days;
+			document.getElementById("hours").innerHTML = hours;
+			document.getElementById("minutes").innerHTML = minutes;
+			document.getElementById("seconds").innerHTML = seconds;
+		};
+		update();
+		setInterval(update, 1000);
+		var huzzah = function(data) {
+			console.dir(data);
+			if(data.error) {
+				return;
+			}
+			document.getElementById("tweet").href = "https://twitter.com/" + data.username;
+			document.getElementById("tweet").innerHTML = data.text;
+			document.getElementById("tweet").style.display = "block";
+			document.getElementById("tweeting").style.display = "block";
+		};
+		var script = document.createElement("script");
+		script.src = "http://countdown.hmltn.me/lesko-tweet?callback=huzzah";
+		//document.getElementsByTagName("head")[0].appendChild(script); //Old browsers will be the death of me.
+	</script>
+</body>
+</html>
